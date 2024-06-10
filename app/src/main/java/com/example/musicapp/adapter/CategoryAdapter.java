@@ -1,7 +1,10 @@
 package com.example.musicapp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.RoundedCorner;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -11,7 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.musicapp.R;
+import com.example.musicapp.SongsListActivity;
 import com.example.musicapp.models.CategoryModel;
 
 import java.util.List;
@@ -38,7 +44,19 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
         int pos = position;
         CategoryModel category = this.categories.get(pos);
         holder.txtV.setText(category.getNameCat());
-        Glide.with(holder.imgV).load(category.getCoverUrlCat()).into(holder.imgV);
+        Glide.with(holder.imgV).load(category.getCoverUrlCat())
+                .apply(
+                        new RequestOptions().transform(new RoundedCorners(32)) // Bo goc
+                ).into(holder.imgV);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), SongsListActivity.class);
+                intent.putExtra("CATEGORY", category);
+                v.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
