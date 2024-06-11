@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
         this.SetUpSection("Trending", R.id.section_1_recycler_view, R.id.section_1_title, this.findViewById(R.id.section_1_main_layout));
         this.SetUpSection("Lofi Chill", R.id.section_2_recycler_view, R.id.section_2_title, this.findViewById(R.id.section_2_main_layout));
+
+        SetCachePlayer();
     }
 
     public void getCategories(){
@@ -106,5 +109,17 @@ public class MainActivity extends AppCompatActivity {
                         //Log.e(TAG, documentSnapshot.getData().toString());
                     }
                 });
+    }
+
+    public void SetCachePlayer(){
+        RelativeLayout relativeLayout = this.findViewById(R.id.cachePlayer_view);
+        ImageView coverUrl = this.findViewById(R.id.main_songcoverUrl_image_view);
+        SongModel songModel = CacheExoPlayer.getInstance().getSongModel();
+        if(songModel != null) {
+            relativeLayout.setVisibility(View.VISIBLE);
+            Glide.with(coverUrl).load(songModel.getCoverUrl()).into(coverUrl);
+        }
+        else
+            relativeLayout.setVisibility(View.INVISIBLE);
     }
 }

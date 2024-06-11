@@ -184,4 +184,20 @@
         </LinearLayout>
     </ScrollView>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black"
+        android:padding="8dp"
+        android:id="@+id/cachePlayer_view"
+        android:layout_alignParentBottom="true"
+        android:visibility="invisible">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/main_songcoverUrl_image_view">
+        </ImageView>
+    </RelativeLayout>
+
 </RelativeLayout>

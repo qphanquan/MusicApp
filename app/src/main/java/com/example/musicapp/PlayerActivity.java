@@ -29,6 +29,7 @@ public class PlayerActivity extends AppCompatActivity {
     private TextView songName;
     private TextView singerName;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,8 +56,10 @@ public class PlayerActivity extends AppCompatActivity {
         this.songName.setText(songModel.getSongName());
         this.singerName.setText(songModel.getSingerName());
 
-        SetUpExoPlayer();
+        //SetUpExoPlayer();
+        CacheExoPlayer.getInstance().startPlaying(this, this.songModel);
 
+        this.exoPlayer = CacheExoPlayer.getInstance().getExoPlayer();
         this.exoPlayer.addListener(new Player.Listener() {
             @Override
             public void onIsPlayingChanged(boolean isPlaying) {
