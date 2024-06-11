@@ -1,6 +1,8 @@
 package com.example.musicapp.models;
 
-public class SongModel {
+import java.io.Serializable;
+
+public class SongModel implements Serializable {
     private String id;
     private String songName;
     private String singerName;

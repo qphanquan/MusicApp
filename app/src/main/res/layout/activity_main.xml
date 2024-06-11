@@ -75,7 +75,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/section_1_title"
-                    android:text="Treding"
+                    android:text="Trending"
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     android:fontFamily="sans-serif-medium">
