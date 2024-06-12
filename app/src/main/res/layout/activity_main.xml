@@ -196,8 +196,38 @@
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:scaleType="fitXY"
             android:id="@+id/main_songcoverUrl_image_view">
         </ImageView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:orientation="vertical"
+            android:layout_toEndOf="@id/main_songcoverUrl_image_view">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="Song name"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:id="@+id/main_songName_text_view">
+            </TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Singer Name"
+                android:textColor="@color/textWhite"
+                android:id="@+id/main_singerName_text_view">
+            </TextView>
+        </LinearLayout>
+
     </RelativeLayout>
 
 </RelativeLayout>

@@ -53,13 +53,18 @@ public class MainActivity extends AppCompatActivity {
         this.Init();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ShowPlayerView();
+    }
+
     public void Init(){
         this.getCategories();
 
         this.SetUpSection("Trending", R.id.section_1_recycler_view, R.id.section_1_title, this.findViewById(R.id.section_1_main_layout));
         this.SetUpSection("Lofi Chill", R.id.section_2_recycler_view, R.id.section_2_title, this.findViewById(R.id.section_2_main_layout));
 
-        SetCachePlayer();
     }
 
     public void getCategories(){
@@ -111,15 +116,19 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    public void SetCachePlayer(){
+    public void ShowPlayerView(){
         RelativeLayout relativeLayout = this.findViewById(R.id.cachePlayer_view);
         ImageView coverUrl = this.findViewById(R.id.main_songcoverUrl_image_view);
+        TextView songName = this.findViewById(R.id.main_songName_text_view);
+        TextView singerName = this.findViewById(R.id.main_singerName_text_view);
         SongModel songModel = CacheExoPlayer.getInstance().getSongModel();
         if(songModel != null) {
             relativeLayout.setVisibility(View.VISIBLE);
-            Glide.with(coverUrl).load(songModel.getCoverUrl()).into(coverUrl);
+            songName.setText(songModel.getSongName());
+            singerName.setText(songModel.getSingerName());
+            Glide.with(coverUrl).load(songModel.getCoverUrl()).circleCrop().into(coverUrl);
         }
         else
-            relativeLayout.setVisibility(View.INVISIBLE);
+            relativeLayout.setVisibility(View.GONE);
     }
 }
