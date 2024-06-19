@@ -2,12 +2,13 @@ package com.example.musicapp.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +18,8 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.musicapp.PlayerActivity;
 import com.example.musicapp.R;
+import com.example.musicapp.models.SongModel;
+import com.example.musicapp.models.FavoriteModel;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -24,66 +27,87 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.List;
 
 public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyViewHolder> {
-    private static final String TAG = "SongsListAdapter";
-    private LayoutInflater mInflater;
+    private Context context;
     private List<String> songsId;
 
     public SongsListAdapter(Context context, List<String> songsId){
-        this.mInflater = LayoutInflater.from(context);
+        this.context = context;
         this.songsId = songsId;
     }
+
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.song_list_item_recycler_row, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.song_list_item_recycler_row, parent, false);
         return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        int pos = position;
-        FirebaseFirestore.getInstance().collection("Song")
-                .document(this.songsId.get(pos)).get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        SongModel songModel = documentSnapshot.toObject(SongModel.class);
-                        if(songModel != null){
-                            holder.songName.setText(songModel.getSongName());
-                            holder.singerName.setText(songModel.getSingerName());
-                            Glide.with(holder.coverUrl).load(songModel.getCoverUrl())
-                                    .apply(
-                                            new RequestOptions().transform(new RoundedCorners(32)) // Bo goc
-                                    ).into(holder.coverUrl);
+        String songId = songsId.get(position);
 
-                            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Intent intent = new Intent(v.getContext(), PlayerActivity.class);
-                                    intent.putExtra("SONG", songModel);
-                                    v.getContext().startActivity(intent);
-                                }
-                            });
-                        }
-                        Log.e(TAG, documentSnapshot.getData().toString());
+        // Load song details from Firestore
+        FirebaseFirestore.getInstance().collection("Song")
+                .document(songId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    SongModel songModel = documentSnapshot.toObject(SongModel.class);
+                    if (songModel != null) {
+                        holder.songName.setText(songModel.getSongName());
+                        holder.singerName.setText(songModel.getSingerName());
+                        Glide.with(context)
+                                .load(songModel.getCoverUrl())
+                                .apply(new RequestOptions().transform(new RoundedCorners(32)))
+                                .into(holder.coverUrl);
+
+                        // Handle add button click
+                        holder.addToFavoriteButton.setOnClickListener(v -> addToFavorites(songModel));
                     }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(context, "Failed to load song: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    // Method to handle adding the song to favorites
+    private void addToFavorites(SongModel songModel) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FavoriteModel favoriteModel = new FavoriteModel(
+                songModel.getId(),
+                songModel.getSongName(),
+                songModel.getSingerName(),
+                songModel.getCoverUrl(),
+                songModel.getSongUrl()
+        );
+
+        db.collection("Favorites")
+                .document(favoriteModel.getId())
+                .set(favoriteModel)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(context, "Added to favorites: " + songModel.getSongName(), Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(context, "Failed to add to favorites: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 
     @Override
     public int getItemCount() {
-        return this.songsId.size();
+        return songsId.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
-        private ImageView coverUrl;
-        private TextView songName;
-        private TextView singerName;
-        public MyViewHolder(@NonNull View itemView) {
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
+        ImageView coverUrl;
+        TextView songName;
+        TextView singerName;
+        Button addToFavoriteButton;
+
+        public MyViewHolder(View itemView) {
             super(itemView);
             coverUrl = itemView.findViewById(R.id.songslist_coverUrl_image_view);
             songName = itemView.findViewById(R.id.songslist_songName_text_view);
             singerName = itemView.findViewById(R.id.songslist_singerName_text_view);
+            addToFavoriteButton = itemView.findViewById(R.id.add_playlist);
         }
     }
 }

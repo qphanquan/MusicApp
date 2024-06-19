@@ -41,8 +41,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="add"
-        android:id="@+id/add_playlist"
+        android:text="remove"
+        android:id="@+id/remove_playlist"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"/>
 
