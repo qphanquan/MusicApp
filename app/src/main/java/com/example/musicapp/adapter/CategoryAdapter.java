@@ -2,9 +2,7 @@ package com.example.musicapp.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.RoundedCorner;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -18,7 +16,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.musicapp.R;
 import com.example.musicapp.SongsListActivity;
-import com.example.musicapp.models.CategoryModel;
 
 import java.util.List;
 

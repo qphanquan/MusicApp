@@ -1,7 +1,6 @@
 package com.example.musicapp;
 
 import android.os.Bundle;
-import android.transition.Explode;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,7 +16,6 @@ import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.ui.PlayerView;
 
 import com.bumptech.glide.Glide;
-import com.example.musicapp.models.SongModel;
 
 public class PlayerActivity extends AppCompatActivity {
 
