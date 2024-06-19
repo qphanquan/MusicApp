@@ -17,7 +17,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.musicapp.PlayerActivity;
 import com.example.musicapp.R;
-import com.example.musicapp.models.SongModel;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
