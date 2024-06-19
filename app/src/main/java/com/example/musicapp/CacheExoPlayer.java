@@ -7,6 +7,8 @@ import androidx.media3.common.MediaItem;
 import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.ui.PlayerView;
 
+import com.example.musicapp.models.SongModel;
+
 public class CacheExoPlayer {
     private static CacheExoPlayer Instance;
     private ExoPlayer exoPlayer;

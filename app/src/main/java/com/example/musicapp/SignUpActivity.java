@@ -1,8 +1,6 @@
 package com.example.musicapp;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,8 +9,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class SignUpActivity extends AppCompatActivity {
-
-    private EditText email_edittext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
