@@ -33,7 +33,7 @@ public class UserModel {
     public String getPassword(){return Password;}
     public void setPassword(String password){Password = password;}
 
-    public String getConfirmpassword(){return Confirmpassword}
-    public void setConf;irmpassword(String confirmpassword){Confirmpassword = confirmpassword;}
+    public String getConfirmpassword(){return Confirmpassword;}
+    public void setConfirmpassword(String confirmpassword){Confirmpassword = confirmpassword;}
 
 }
