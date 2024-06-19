@@ -18,11 +18,20 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.musicapp.PlayerActivity;
 import com.example.musicapp.R;
+<<<<<<< HEAD
 import com.example.musicapp.models.SongModel;
 import com.example.musicapp.models.FavoriteModel;
+=======
+import com.example.musicapp.models.CategoryModel;
+import com.example.musicapp.models.SongModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+>>>>>>> parent of 33ec5e1 (commit)
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
 
