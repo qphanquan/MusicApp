@@ -4,4 +4,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="blueDark">#010B28</color>
     <color name="textWhite">#CFCFD0</color>
+    <color name="colorWhite">#FFF</color>
+    <color name="colorGrey">#CCC</color>
+    <color name="colorQueen">#9C27B0</color>
 </resources>

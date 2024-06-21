@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">MusicApp</string>
-    <string name="tendangnhap">Email</string>
-    <string name="matkhau">Password</string>
+    <string name="username">UserName</string>
+    <string name="acountname">Email</string>
+    <string name="password">Password</string>
     <string name="confirmpass">Confirm Password</string>
 </resources>

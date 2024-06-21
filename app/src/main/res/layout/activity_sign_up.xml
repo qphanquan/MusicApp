@@ -1,10 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/signup"
     tools:context=".SignUpActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Signup"
+        android:textColor="@color/colorWhite"
+        android:layout_above="@id/main"
+        android:layout_centerHorizontal="true"
+        android:padding="20dp"
+        android:layout_margin="30dp"
+        android:textStyle="bold"
+        android:textSize="35sp"
+
+        />
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+
+
+        <EditText
+            android:id="@+id/sigup_UserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/colorWhite"
+            android:drawablePadding="10dp"
+            android:hint="@string/username"
+            android:padding="10dp"
+            android:textColorHint="@color/colorGrey" />
+
+        <EditText
+
+            android:id="@+id/sigup_AccountName"
+            android:layout_width="388dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/colorWhite"
+            android:drawablePadding="10dp"
+            android:hint="@string/acountname"
+            android:padding="10dp"
+            android:textColorHint="@color/colorGrey" />
+
+
+
+        <EditText
+            android:id="@+id/sigup_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/colorWhite"
+            android:drawablePadding="10dp"
+            android:hint="@string/password"
+            android:padding="10dp"
+            android:textColorHint="@color/colorGrey" />
+
+        <EditText
+            android:id="@+id/sigup_confirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/colorWhite"
+            android:drawablePadding="10dp"
+            android:hint="@string/confirmpass"
+            android:padding="10dp"
+            android:textColorHint="@color/colorGrey" />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/sigup_btn"
+                android:background="@drawable/sigin"
+                android:textColor="@color/white"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="20dp"
+                android:text="Sigup"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/user_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/empty_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No users found"
+                android:gravity="center"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
+
+
+
+    </LinearLayout>
+
+</RelativeLayout>
