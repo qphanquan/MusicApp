@@ -14,6 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MusicApp"
         tools:targetApi="31" >
+
         <activity
             android:name=".FavoriteActivity"
             android:exported="false" />
@@ -25,20 +26,11 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
 
         <activity
             android:name=".SignUpActivity"
-            android:exported="false" >
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-
-    </activity>
+            android:exported="false" />
         <activity
             android:name=".PlayerActivity"
             android:exported="false" />

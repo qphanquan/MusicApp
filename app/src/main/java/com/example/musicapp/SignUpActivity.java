@@ -1,10 +1,14 @@
 package com.example.musicapp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -17,54 +21,29 @@ import com.example.musicapp.models.FavoriteModel;
 import com.example.musicapp.models.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class SignUpActivity extends AppCompatActivity {
 
     EditText userNameTxt;
-
-    EditText accoutNameTxt;
+    EditText emailAddressTxt;
     EditText passWordTxt;
-
     EditText confirmPasswordTxt;
+    Button createAccountBtn;
+    TextView loginTxtView;
 
-    Button createaccountTxt;
+    String userName;
+    String emailAddress;
+    String password;
+    String confirmPassword;
 
-    TextView userTextView;
-    TextView emptyView;
-    private List<UserModel> userList;
-
-    private void Init(){
-        this.userNameTxt = this.findViewById(R.id.sigup_UserName);
-        this.accoutNameTxt = this.findViewById(R.id.sigup_AccountName);
-        this.passWordTxt = this.findViewById(R.id.sigup_password);
-        this.confirmPasswordTxt = this.findViewById(R.id.sigup_confirmPassword);
-        this.createaccountTxt = this.findViewById(R.id.sigup_btn);
-        this.userTextView = this.findViewById(R.id.user_text_view);
-        this.emptyView = this.findViewById(R.id.empty_view);
-        this.createaccountTxt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UserModel userModel = new UserModel(userNameTxt.getText().toString(), accoutNameTxt.getText().toString(), passWordTxt.getText().toString(), confirmPasswordTxt.getText().toString());
-                userList.add(userModel);
-                updateUserTextView();
-                updateEmptyView();
-            }
-        });
-
-    }
-
-    private void updateUserTextView() {
-        StringBuilder userDisplay = new StringBuilder();
-        for (UserModel user : userList) {
-            userDisplay.append(user.getAccountName()).append("\n");
-        }
-        userTextView.setText(userDisplay.toString());
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,38 +55,79 @@ public class SignUpActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-    }
-    private void loadUser(){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("User")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            userList.clear();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                UserModel user = document.toObject(UserModel.class);
-                                user.setAccountName(document.getId());
-                                userList.add(user);
-                            }
-                            updateUserTextView();
-                            updateEmptyView();
-                        } else {
 
-                            // Log.e(TAG, "Error getting documents: ", task.getException());
+        Init();
+    }
+
+    private void Init(){
+        this.userNameTxt = this.findViewById(R.id.signup_username);
+        this.emailAddressTxt = this.findViewById(R.id.signup_emailAddress);
+        this.passWordTxt = this.findViewById(R.id.signup_password);
+        this.confirmPasswordTxt = this.findViewById(R.id.signup_confirmPassword);
+        this.createAccountBtn = this.findViewById(R.id.create_account_btn);
+        this.loginTxtView = this.findViewById(R.id.goto_login);
+        this.createAccountBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userName = userNameTxt.getText().toString();
+                emailAddress = emailAddressTxt.getText().toString();
+                password =  passWordTxt.getText().toString();
+                confirmPassword = confirmPasswordTxt.getText().toString();
+
+                if(checkAccountUser(userName, emailAddress, password, confirmPassword)){
+                    UserModel userModel = new UserModel(userName, emailAddress, password, confirmPassword);
+                    addUser(userModel);
+                }
+            }
+        });
+
+        this.loginTxtView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), LoginActivity.class);
+                v.getContext().startActivity(intent);
+            }
+        });
+
+    }
+
+    private boolean checkAccountUser(String user, String email, String password, String confirmPassword){
+
+        if(TextUtils.isEmpty(user)){
+            this.userNameTxt.setError("Not null");
+            return false;
+        }
+
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            this.emailAddressTxt.setError("Invalid email");
+            return false;
+        }
+
+        if(password.length() < 6){
+            this.passWordTxt.setError("Length should be 6 char");
+            return false;
+        }
+
+        if(!password.equals(confirmPassword)){
+            this.confirmPasswordTxt.setError("Password not matched");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void addUser(UserModel userModel) {
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(userModel.getEmail(), userModel.getPassword())
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(SignUpActivity.this, "User created successfully", Toast.LENGTH_SHORT).show();
+                            //finish();
+                        } else {
+                            Toast.makeText(SignUpActivity.this, "Create account failed", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
-   }
-
-    private void updateEmptyView() {
-        if (userList.isEmpty()) {
-            emptyView.setVisibility(View.VISIBLE);
-        } else {
-            emptyView.setVisibility(View.GONE);
         }
-
     }
-
-}

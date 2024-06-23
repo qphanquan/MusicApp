@@ -18,9 +18,12 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.musicapp.models.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.auth.User;
 
 public class LoginActivity extends AppCompatActivity {
     EditText accountNameTxt;
@@ -51,19 +54,35 @@ public class LoginActivity extends AppCompatActivity {
         this.signupTxtView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
-                startActivity(intent);
+                Intent intent = new Intent(v.getContext(), SignUpActivity.class);
+                v.getContext().startActivity(intent);
             }
         });
 
         this.loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String accountName = accountNameTxt.getText().toString();
+                String emailAddress = accountNameTxt.getText().toString();
                 String password = passwordTxt.getText().toString();
-                checkUserCredentials(accountName, password);
+                loginWithFirebase(emailAddress, password);
+                //checkUserCredentials(accountName, password);
             }
         });
+    }
+
+    private void loginWithFirebase(String email, String pass){
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, pass)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            //finish();
+                        } else {
+                            Toast.makeText(LoginActivity.this, "Login account failed", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     private void checkUserCredentials(String accountName, String password) {
