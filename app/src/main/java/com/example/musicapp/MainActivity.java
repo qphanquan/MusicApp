@@ -128,12 +128,19 @@ public class MainActivity extends AppCompatActivity {
         ImageView coverUrl = this.findViewById(R.id.main_songcoverUrl_image_view);
         TextView songName = this.findViewById(R.id.main_songName_text_view);
         TextView singerName = this.findViewById(R.id.main_singerName_text_view);
-        SongModel songModel = CacheExoPlayer.getInstance().getSongModel();
-        if(songModel != null) {
+        SongModel currentSong = CacheExoPlayer.getInstance().getCurrentSong();
+        if(currentSong != null) {
             relativeLayout.setVisibility(View.VISIBLE);
-            songName.setText(songModel.getSongName());
-            singerName.setText(songModel.getSingerName());
-            Glide.with(coverUrl).load(songModel.getCoverUrl()).circleCrop().into(coverUrl);
+            songName.setText(currentSong.getSongName());
+            singerName.setText(currentSong.getSingerName());
+//            Glide.with(coverUrl)
+//                    .load(currentSong.getCoverUrl())
+//                    .asBitmap()
+//                    .centerCrop()
+//                    .transform(new MyTransformation(mContext, 90))
+//                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+//                    .into(coverUrl);
+            //Glide.with(coverUrl).load(currentSong.getCoverUrl()).circleCrop().into(coverUrl);
         }
         else
             relativeLayout.setVisibility(View.GONE);

@@ -72,16 +72,6 @@ public class PlayerActivity extends AppCompatActivity {
         });
     }
 
-    public void SetUpExoPlayer(){
-        PlayerView playerView = this.findViewById(R.id.player_view);
-        this.exoPlayer = new ExoPlayer.Builder(this).build();
-        playerView.setPlayer(exoPlayer);
-        MediaItem mediaItem = MediaItem.fromUri(this.songModel.getSongUrl());
-        exoPlayer.setMediaItem(mediaItem);
-        exoPlayer.prepare();
-        exoPlayer.play();
-    }
-
     public void showGif(boolean isPlaying){
         if(isPlaying)
             this.gifImg.setVisibility(View.VISIBLE);
