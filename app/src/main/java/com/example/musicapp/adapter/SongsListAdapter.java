@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +43,7 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyVi
         return new MyViewHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         String songId = songsId.get(position);
@@ -60,8 +62,20 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyVi
                                 .apply(new RequestOptions().transform(new RoundedCorners(32)))
                                 .into(holder.coverUrl);
 
+                        // Check if the song is already in favorites
+                        FirebaseFirestore.getInstance().collection("Favorites")
+                                .document(songModel.getId())
+                                .get()
+                                .addOnSuccessListener(favoriteSnapshot -> {
+                                    if (favoriteSnapshot.exists()) {
+                                        holder.addToFavoriteButton.setImageResource(R.drawable.ic_red_favorite_24);
+                                    } else {
+                                        holder.addToFavoriteButton.setImageResource(R.drawable.ic_shadow_favorite_24);
+                                    }
+                                });
+
                         // Handle add button click
-                        holder.addToFavoriteButton.setOnClickListener(v -> addToFavorites(songModel));
+                        holder.addToFavoriteButton.setOnClickListener(v -> addToFavorites(songModel, holder.addToFavoriteButton));
                     }
                 })
                 .addOnFailureListener(e -> {
@@ -70,7 +84,7 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyVi
     }
 
     // Method to handle adding the song to favorites
-    private void addToFavorites(SongModel songModel) {
+    private void addToFavorites(SongModel songModel, ImageButton addToFavoriteButton) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FavoriteModel favoriteModel = new FavoriteModel(
                 songModel.getId(),
@@ -84,6 +98,7 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyVi
                 .document(favoriteModel.getId())
                 .set(favoriteModel)
                 .addOnSuccessListener(aVoid -> {
+                    addToFavoriteButton.setImageResource(R.drawable.ic_red_favorite_24);
                     Toast.makeText(context, "Added to favorites: " + songModel.getSongName(), Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> {
@@ -100,7 +115,7 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyVi
         ImageView coverUrl;
         TextView songName;
         TextView singerName;
-        Button addToFavoriteButton;
+        ImageButton addToFavoriteButton;
 
         public MyViewHolder(View itemView) {
             super(itemView);

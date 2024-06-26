@@ -18,6 +18,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,6 +29,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.musicapp.adapter.CategoryAdapter;
 import com.example.musicapp.adapter.SectionSongListAdapter;
+import com.example.musicapp.databinding.ActivityMainBinding;
 import com.example.musicapp.models.CategoryModel;
 import com.example.musicapp.models.SongModel;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -38,7 +42,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
+    ActivityMainBinding binding;
     private static final String TAG = "MainActivity";
 
     private CategoryAdapter categoryAdapter;
@@ -49,16 +53,29 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        show = findViewById(R.id.show_playlist);
-        show.setOnClickListener(new View.OnClickListener() {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,FavoriteActivity.class);
-                startActivity(intent);
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                if (id == R.id.navigation_home) {
+                    // Handle the "Home" navigation item
+                    return true;
+                } else if (id == R.id.navigation_playlist) {
+                    Intent intent = new Intent(MainActivity.this, FavoriteActivity.class);
+                    startActivity(intent);
+                    return true;
+                }
+                return false;
             }
         });
         Init();
     }
+//    private void replaceFragment(Fragment fragment){
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        fragmentTransaction.commit();
+//    }
 
     @Override
     protected void onResume() {
