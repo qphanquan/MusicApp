@@ -56,27 +56,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <CheckBox
-                android:id="@+id/rememberCheckBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="Nhớ mật khẩu"
-                android:textColor="@color/colorWhite"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/Txtforgotpass"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:padding="10dp"
-                android:text="Bạn quên mật khẩu ư?"
+                android:text="Forgot Password?"
                 android:textColor="@color/colorWhite"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/rememberCheckBox" />
+                />
 
         </RelativeLayout>
 
@@ -90,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="20dp"
-                android:text="Đăng nhập"
+                android:text="Login"
                 android:textAlignment="center" />
 
         </RelativeLayout>
@@ -98,7 +89,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Bạn chưa có tài khoản ?"
+            android:text="Do not have an account ?"
             android:textColor="@color/colorWhite"
             android:gravity="center"
             android:id="@+id/goto_signup">
