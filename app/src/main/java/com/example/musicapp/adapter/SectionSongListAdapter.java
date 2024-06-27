@@ -44,7 +44,8 @@ public class SectionSongListAdapter extends RecyclerView.Adapter<SectionSongList
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         int pos = position;
         FirebaseFirestore.getInstance().collection("Song")
-                .document(this.songsId.get(pos)).get()
+                .document(this.songsId.get(pos))
+                .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {

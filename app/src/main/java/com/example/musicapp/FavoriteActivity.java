@@ -43,14 +43,12 @@ public class FavoriteActivity extends AppCompatActivity {
                 int id = item.getItemId();
                 if (id == R.id.navigation_home) {
                     // Handle the "Home" navigation item
-                    Toast.makeText(FavoriteActivity.this, "Home Selected", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(FavoriteActivity.this, MainActivity.class);
-                    startActivity(intent);
+                    Intent homeIntent = new Intent(FavoriteActivity.this, MainActivity.class);
+                    startActivity(homeIntent);
                     finish();
                     return true;
                 } else if (id == R.id.navigation_playlist) {
                     // Handle the "Playlist" navigation item
-                    Toast.makeText(FavoriteActivity.this, "Playlist Selected", Toast.LENGTH_SHORT).show();
                     Intent playlistIntent = new Intent(FavoriteActivity.this, FavoriteActivity.class);
                     startActivity(playlistIntent);
                     return true;

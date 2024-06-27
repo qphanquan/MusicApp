@@ -82,6 +82,15 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyVi
 
                         // Handle add button click
                         holder.addToFavoriteButton.setOnClickListener(v -> addToFavorites(songModel, holder.addToFavoriteButton));
+
+                        holder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(v.getContext(), PlayerActivity.class);
+                                intent.putExtra("SONG", songModel);
+                                v.getContext().startActivity(intent);
+                            }
+                        });
                     }
                 })
                 .addOnFailureListener(e -> {
@@ -109,6 +118,21 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyVi
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(context, "Failed to add to favorites: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private void deleteFavoriteFromFirestore(FavoriteModel favorite, ImageButton addToFavoriteButton) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("Favorites")
+                .document(favorite.getId())
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    addToFavoriteButton.setImageResource(R.drawable.ic_shadow_favorite_24);
+                    Toast.makeText(context, "Deleted from favorites successfully", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    // Handle failure: Show error message or log the error
+                    Toast.makeText(context, "Failed to delete from favorites: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 

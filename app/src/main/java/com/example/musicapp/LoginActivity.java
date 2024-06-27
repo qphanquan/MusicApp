@@ -29,7 +29,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.auth.User;
 
 public class LoginActivity extends AppCompatActivity {
-    EditText accountNameTxt;
+    EditText emailAddressTxt;
     EditText passwordTxt;
     Button loginBtn;
     TextView signupTxtView;
@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void Init() {
-        this.accountNameTxt = this.findViewById(R.id.login_accountName);
+        this.emailAddressTxt = this.findViewById(R.id.login_emailAddress);
         this.passwordTxt = this.findViewById(R.id.login_password);
         this.loginBtn = this.findViewById(R.id.login_btn);
         this.signupTxtView = this.findViewById(R.id.goto_signup);
@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
         this.loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String emailAddress = accountNameTxt.getText().toString();
+                String emailAddress = emailAddressTxt.getText().toString();
                 String password = passwordTxt.getText().toString();
                 loginWithFirebase(emailAddress, password);
                 //checkUserCredentials(accountName, password);

@@ -1,102 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:context=".LoginActivity"
+    android:orientation="vertical"
     android:background="@drawable/login"
-    tools:context=".LoginActivity">
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Login Music"
-        android:textColor="@color/colorWhite"
-        android:layout_above="@id/main"
-        android:layout_centerHorizontal="true"
-        android:padding="20dp"
-        android:layout_margin="30dp"
-        android:textStyle="bold"
-        android:textSize="35sp"
-
-        />
+    android:gravity="center"
+    android:padding="16dp">
 
     <LinearLayout
-        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:layout_marginBottom="10dp"
         android:orientation="vertical">
-
-        <EditText
-            android:id="@+id/login_accountName"
-            android:layout_width="388dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="@color/colorWhite"
-            android:drawableLeft="@drawable/ic_user"
-            android:drawablePadding="10dp"
-            android:hint="@string/acountname"
-            android:padding="10dp"
-            android:textColorHint="@color/colorGrey" />
-
-        <EditText
-            android:id="@+id/login_password"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="@color/colorWhite"
-            android:drawableLeft="@drawable/ic_pass"
-            android:drawablePadding="10dp"
-            android:hint="@string/password"
-            android:padding="10dp"
-            android:textColorHint="@color/colorGrey" />
+            android:fontFamily="monospace"
+            android:text="Login"
+            android:gravity="center"
+            android:textColor="@color/textWhite"
+            android:textSize="50sp"
+            android:textStyle="bold">
+        </TextView>
+    </LinearLayout>
 
-        <RelativeLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="16dp"
+        android:orientation="vertical">
+        <EditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:hint="Email Address"
+            android:inputType="textEmailAddress"
+            android:textColorHint="@color/black"
+            android:background="@drawable/rounded_corner"
+            android:padding="16dp"
+            android:id="@+id/login_emailAddress">
+        </EditText>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp">
+        </View>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:textColorHint="@color/black"
+            android:background="@drawable/rounded_corner"
+            android:padding="16dp"
+            android:id="@+id/login_password">
+        </EditText>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp">
+        </View>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end">
 
             <TextView
-                android:id="@+id/Txtforgotpass"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:padding="10dp"
+                android:id="@+id/Txtforgotpass"
+                android:textColor="@color/textWhite"
                 android:text="Forgot Password?"
-                android:textColor="@color/colorWhite"
-                app:layout_constraintEnd_toEndOf="parent"
-                />
+                android:textSize="20sp">
+            </TextView>
+        </LinearLayout>
 
-        </RelativeLayout>
-
-        <RelativeLayout
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="20dp">
+        </View>
 
-            <Button
-                android:id="@+id/login_btn"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="20dp"
-                android:text="Login"
-                android:textAlignment="center" />
+        <Button
+            android:id="@+id/login_btn"
+            android:background="@drawable/sigin"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Login"
+            android:textSize="20sp"
+            android:textAlignment="center" />
 
-        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp">
+        </View>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Do not have an account ?"
-            android:textColor="@color/colorWhite"
+            android:text="Already have an account?"
+            android:textColor="@color/textWhite"
             android:gravity="center"
             android:id="@+id/goto_signup">
         </TextView>
-
-
-
     </LinearLayout>
-
-</RelativeLayout>
+</LinearLayout>

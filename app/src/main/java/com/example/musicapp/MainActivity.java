@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -29,6 +30,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.musicapp.adapter.CategoryAdapter;
 import com.example.musicapp.adapter.SectionSongListAdapter;
+import com.example.musicapp.adapter.SongsListAdapter;
 import com.example.musicapp.models.CategoryModel;
 import com.example.musicapp.models.SongModel;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -39,8 +41,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 
-
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -48,7 +49,11 @@ public class MainActivity extends AppCompatActivity {
 
     private CategoryAdapter categoryAdapter;
     private SectionSongListAdapter sectionSongListAdapter;
+    private SongsListAdapter songsListAdapter;
     ImageView show;
+    SearchView searchViewSongs;
+    List<String> idSongNames;
+    List<SongModel> songModels;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,20 +66,14 @@ public class MainActivity extends AppCompatActivity {
                 int id = item.getItemId();
                 if (id == R.id.navigation_home) {
                     // Handle the "Home" navigation item
-                    Toast.makeText(MainActivity.this, "Home Selected", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(MainActivity.this, MainActivity.class);
-                    startActivity(intent);
+                    Intent homeIntent = new Intent(MainActivity.this, MainActivity.class);
+                    startActivity(homeIntent);
                     finish();
                     return true;
                 } else if (id == R.id.navigation_playlist) {
                     // Handle the "Playlist" navigation item
-                    Toast.makeText(MainActivity.this, "Playlist Selected", Toast.LENGTH_SHORT).show();
                     Intent playlistIntent = new Intent(MainActivity.this, FavoriteActivity.class);
                     startActivity(playlistIntent);
-                    return true;
-                } else if (id == R.id.navigation_playlist) {
-                    Intent intent = new Intent(MainActivity.this, FavoriteActivity.class);
-                    startActivity(intent);
                     return true;
                 }
                 return false;
@@ -95,11 +94,69 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void Init(){
+        this.idSongNames = new ArrayList<>();
         this.getCategories();
+        this.getSongs();
 
         this.SetUpSection("Trending", R.id.section_1_recycler_view, R.id.section_1_title, this.findViewById(R.id.section_1_main_layout));
         this.SetUpSection("Lofi Chill", R.id.section_2_recycler_view, R.id.section_2_title, this.findViewById(R.id.section_2_main_layout));
 
+        this.searchViewSongs = this.findViewById(R.id.searchSongs);
+        this.searchViewSongs.clearFocus();
+        this.searchViewSongs.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                SearchSongs(newText);
+                return true;
+            }
+        });
+
+        this.songsListAdapter = new SongsListAdapter(this, this.idSongNames);
+        RecyclerView recyclerView = this.findViewById(R.id.searchSongs_recycler_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(this.songsListAdapter);
+
+    }
+
+    public void SearchSongs(String txtSearch){
+        this.idSongNames = new ArrayList<>();
+        if(!txtSearch.isEmpty()){
+            for(SongModel song : this.songModels){
+                if(song.getSongName().toLowerCase().contains(txtSearch.toLowerCase())){
+                    this.idSongNames.add(song.getId());
+                }
+            }
+        }
+        this.songsListAdapter.SetSongsId(this.idSongNames);
+    }
+
+    public void getSongs(){
+        FirebaseFirestore.getInstance().collection("Song")
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if(queryDocumentSnapshots.isEmpty()){
+                            Log.d(TAG, "onSuccess: LIST EMPTY");
+                            return;
+                        }
+                        else
+                        {
+                            List<SongModel> songModelList = queryDocumentSnapshots.toObjects(SongModel.class);
+                            songModels = songModelList;
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(), "Error getting data!!!", Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     public void getCategories(){
