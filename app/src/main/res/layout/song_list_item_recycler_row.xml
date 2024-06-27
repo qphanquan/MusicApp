@@ -37,18 +37,6 @@
             android:id="@+id/songslist_singerName_text_view">
         </TextView>
     </LinearLayout>
-<<<<<<< HEAD
-=======
-    <ImageButton
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:id="@+id/add_playlist"
-        android:background="@drawable/ic_shadow_favorite_24"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true">
-    </ImageButton>
->>>>>>> f9e87621b0b303af92910387eff015926a9080a3
-
     <ImageButton
         android:layout_width="30dp"
         android:layout_height="30dp"

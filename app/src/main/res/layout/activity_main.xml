@@ -42,8 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="16dp"
-        android:layout_below="@id/toolbar"
-        android:layout_above="@id/cachePlayer_view"> <!-- Đảm bảo phần nội dung nằm trên cachePlayer_view -->
+        android:layout_below="@id/toolbar">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -186,67 +185,68 @@
         </LinearLayout>
     </ScrollView>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/black"
-        android:padding="8dp"
-        android:id="@+id/cachePlayer_view"
-        android:layout_alignParentBottom="true"
-        android:visibility="invisible"
-        android:layout_above="@id/bottomNavigationView"> <!-- Đảm bảo cachePlayer_view nằm trên thanh menu -->
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true">
 
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerVertical="true"
-            android:scaleType="fitXY"
-            android:id="@+id/main_songcoverUrl_image_view">
-        </ImageView>
-
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="16dp"
-            android:orientation="vertical"
-            android:layout_toEndOf="@id/main_songcoverUrl_image_view">
+            android:background="@color/black"
+            android:padding="8dp"
+            android:id="@+id/cachePlayer_view"
+            android:visibility="visible"
+            android:layout_above="@id/bottomNavigationView"> <!-- Đảm bảo cachePlayer_view nằm trên thanh menu -->
 
-            <TextView
-                android:layout_width="wrap_content"
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:scaleType="fitXY"
+                android:id="@+id/main_songcoverUrl_image_view">
+            </ImageView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:text="Song name"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:id="@+id/main_songName_text_view">
-            </TextView>
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:orientation="vertical"
+                android:layout_toEndOf="@id/main_songcoverUrl_image_view">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Singer Name"
-                android:textColor="@color/textWhite"
-                android:id="@+id/main_singerName_text_view">
-            </TextView>
-        </LinearLayout>
-    </RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:text="Song name"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:id="@+id/main_songName_text_view">
+                </TextView>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/blueDark"
-        app:menu="@menu/bottom_nav_menu"
-        app:itemIconTint="@color/white"
-<<<<<<< HEAD
-        app:itemTextColor="@color/white" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Singer Name"
+                    android:textColor="@color/textWhite"
+                    android:id="@+id/main_singerName_text_view">
+                </TextView>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/black"
+            app:menu="@menu/bottom_nav_menu"
+            app:itemIconTint="@color/white"
+            app:itemTextColor="@color/white" />
+    </LinearLayout>
+
 </RelativeLayout>
-=======
-        app:itemTextColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent" />
 
-
-</RelativeLayout>
->>>>>>> f9e87621b0b303af92910387eff015926a9080a3
