@@ -12,49 +12,42 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="8dp"
         android:id="@+id/toolbar">
 
-        <androidx.appcompat.widget.SearchView
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/logo">
+        </ImageView>
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Search Here ...."
-            android:id="@+id/searchSongList"
-            android:background="@drawable/rounded_corner">
-        </androidx.appcompat.widget.SearchView>
-<!--        <ImageView-->
-<!--            android:layout_width="32dp"-->
-<!--            android:layout_height="32dp"-->
-<!--            android:layout_centerVertical="true"-->
-<!--            android:src="@drawable/logo">-->
-<!--        </ImageView>-->
-<!--        <TextView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="WELCOME"-->
-<!--            android:textColor="@color/white"-->
-<!--            android:textSize="24sp"-->
-<!--            android:gravity="center">-->
-<!--        </TextView>-->
-<!--        <ImageView-->
-<!--            android:layout_width="32dp"-->
-<!--            android:layout_height="32dp"-->
-<!--            android:src="@drawable/icon_menu"-->
-<!--            android:layout_alignParentEnd="true"-->
-<!--            android:layout_centerVertical="true"-->
-<!--            android:id="@+id/show_playlist">-->
-<!--        </ImageView>-->
+            android:text="WELCOME"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:gravity="center">
+        </TextView>
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/icon_menu"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:id="@+id/show_playlist">
+        </ImageView>
     </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/toolbar">
+        android:layout_marginTop="16dp"
+        android:layout_below="@id/toolbar"
+        android:layout_above="@id/cachePlayer_view"> <!-- Đảm bảo phần nội dung nằm trên cachePlayer_view -->
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
@@ -193,19 +186,6 @@
         </LinearLayout>
     </ScrollView>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_below="@+id/toolbar">
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/searchSongList"
-            android:id="@+id/searchSongList_recycler_view">
-        </androidx.recyclerview.widget.RecyclerView>
-    </ScrollView>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -213,7 +193,8 @@
         android:padding="8dp"
         android:id="@+id/cachePlayer_view"
         android:layout_alignParentBottom="true"
-        android:visibility="invisible">
+        android:visibility="invisible"
+        android:layout_above="@id/bottomNavigationView"> <!-- Đảm bảo cachePlayer_view nằm trên thanh menu -->
 
         <ImageView
             android:layout_width="40dp"
@@ -249,7 +230,23 @@
                 android:id="@+id/main_singerName_text_view">
             </TextView>
         </LinearLayout>
-
     </RelativeLayout>
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/blueDark"
+        app:menu="@menu/bottom_nav_menu"
+        app:itemIconTint="@color/white"
+<<<<<<< HEAD
+        app:itemTextColor="@color/white" />
 </RelativeLayout>
+=======
+        app:itemTextColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+
+</RelativeLayout>
+>>>>>>> f9e87621b0b303af92910387eff015926a9080a3
