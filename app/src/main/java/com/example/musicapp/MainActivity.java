@@ -15,9 +15,11 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.media3.exoplayer.ExoPlayer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,6 +28,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.musicapp.adapter.CategoryAdapter;
 import com.example.musicapp.adapter.SectionSongListAdapter;
+import com.example.musicapp.adapter.SongsListAdapter;
 import com.example.musicapp.models.CategoryModel;
 import com.example.musicapp.models.SongModel;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -35,6 +38,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -43,20 +47,28 @@ public class MainActivity extends AppCompatActivity {
 
     private CategoryAdapter categoryAdapter;
     private SectionSongListAdapter sectionSongListAdapter;
+    private SongsListAdapter songsListAdapter;
+
     ImageView show;
+    SearchView searchSongs;
+
+    int rotation = 0;
+    List<SongModel> getSongs;
+    List<String> getSongsName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        show = findViewById(R.id.show_playlist);
-        show.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,FavoriteActivity.class);
-                startActivity(intent);
-            }
-        });
+//        show = findViewById(R.id.show_playlist);
+//        show.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this,FavoriteActivity.class);
+//                startActivity(intent);
+//            }
+//        });
         Init();
     }
 
@@ -67,11 +79,74 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void Init(){
+        this.getSongsName = new ArrayList<>();
         this.getCategories();
+        this.getSongs();
 
         this.SetUpSection("Trending", R.id.section_1_recycler_view, R.id.section_1_title, this.findViewById(R.id.section_1_main_layout));
         this.SetUpSection("Lofi Chill", R.id.section_2_recycler_view, R.id.section_2_title, this.findViewById(R.id.section_2_main_layout));
 
+        this.searchSongs = this.findViewById(R.id.searchSongList);
+        searchSongs.clearFocus();
+        searchSongs.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                SetUpSearchSongs(newText);
+                return true;
+            }
+        });
+
+        this.songsListAdapter = new SongsListAdapter(this, getSongsName);
+        RecyclerView recyclerView = this.findViewById(R.id.searchSongList_recycler_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(this.songsListAdapter);
+
+    }
+
+    public void getSongs(){
+        FirebaseFirestore.getInstance().collection("Song")
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if(queryDocumentSnapshots.isEmpty()){
+                            Log.d(TAG, "onSuccess: LIST EMPTY");
+                            return;
+                        }
+                        else
+                        {
+                            List<SongModel> songModelList = queryDocumentSnapshots.toObjects(SongModel.class);
+                            getSongs = getIdSongs(songModelList);
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(), "Error getting data!!!", Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
+    public List<SongModel> getIdSongs(List<SongModel> songModels){
+        return !songModels.isEmpty() ? songModels : null;
+    }
+
+    public void SetUpSearchSongs(String textSearch){
+        Log.e(TAG, textSearch);
+        List<String> getSongsName = new ArrayList<>();
+        if(!textSearch.isEmpty()){
+            for(SongModel song : this.getSongs){
+                if(song.getSongName().toLowerCase().contains(textSearch.toLowerCase())){
+                    getSongsName.add(song.getId());
+                }
+            }
+        }
+        this.songsListAdapter.SetSongsId(getSongsName);
     }
 
     public void getCategories(){
@@ -129,18 +204,18 @@ public class MainActivity extends AppCompatActivity {
         TextView songName = this.findViewById(R.id.main_songName_text_view);
         TextView singerName = this.findViewById(R.id.main_singerName_text_view);
         SongModel currentSong = CacheExoPlayer.getInstance().getCurrentSong();
+        ExoPlayer exoPlayer = CacheExoPlayer.getInstance().getExoPlayer();
         if(currentSong != null) {
             relativeLayout.setVisibility(View.VISIBLE);
             songName.setText(currentSong.getSongName());
             singerName.setText(currentSong.getSingerName());
-//            Glide.with(coverUrl)
-//                    .load(currentSong.getCoverUrl())
-//                    .asBitmap()
-//                    .centerCrop()
-//                    .transform(new MyTransformation(mContext, 90))
-//                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
-//                    .into(coverUrl);
-            //Glide.with(coverUrl).load(currentSong.getCoverUrl()).circleCrop().into(coverUrl);
+            Glide.with(coverUrl).load(currentSong.getCoverUrl()).circleCrop().into(coverUrl);
+            if(exoPlayer.isPlaying()){
+                coverUrl.setRotation(this.rotation++);
+            }else{
+                this.rotation = 0;
+                coverUrl.setRotation(this.rotation);
+            }
         }
         else
             relativeLayout.setVisibility(View.GONE);
