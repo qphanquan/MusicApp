@@ -78,6 +78,7 @@ public class SignUpActivity extends AppCompatActivity {
                     UserModel userModel = new UserModel(userName, emailAddress, password, confirmPassword);
                     addUser(userModel);
                 }
+
             }
         });
 
@@ -123,7 +124,10 @@ public class SignUpActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(SignUpActivity.this, "User created successfully", Toast.LENGTH_SHORT).show();
-                            //finish();
+                            Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
+                           
                         } else {
                             Toast.makeText(SignUpActivity.this, "Create account failed", Toast.LENGTH_SHORT).show();
                         }
