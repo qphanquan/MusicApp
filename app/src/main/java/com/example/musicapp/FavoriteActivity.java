@@ -1,8 +1,11 @@
 package com.example.musicapp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +16,7 @@ import com.example.musicapp.adapter.FavoriteAdapter;
 import com.example.musicapp.models.FavoriteModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -31,6 +35,29 @@ public class FavoriteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite_list);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_playlist);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                if (id == R.id.navigation_home) {
+                    // Handle the "Home" navigation item
+                    Toast.makeText(FavoriteActivity.this, "Home Selected", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(FavoriteActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                    return true;
+                } else if (id == R.id.navigation_playlist) {
+                    // Handle the "Playlist" navigation item
+                    Toast.makeText(FavoriteActivity.this, "Playlist Selected", Toast.LENGTH_SHORT).show();
+                    Intent playlistIntent = new Intent(FavoriteActivity.this, FavoriteActivity.class);
+                    startActivity(playlistIntent);
+                    return true;
+                }
+                return false;
+            }
+        });
 
         recyclerView = findViewById(R.id.recycler_view);
         emptyMessage = findViewById(R.id.empty_message);
