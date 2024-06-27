@@ -18,6 +18,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,6 +29,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.musicapp.adapter.CategoryAdapter;
 import com.example.musicapp.adapter.SectionSongListAdapter;
+import com.example.musicapp.databinding.ActivityMainBinding;
 import com.example.musicapp.models.CategoryModel;
 import com.example.musicapp.models.SongModel;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -41,7 +45,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
+    ActivityMainBinding binding;
     private static final String TAG = "MainActivity";
 
     private CategoryAdapter categoryAdapter;
@@ -59,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 int id = item.getItemId();
                 if (id == R.id.navigation_home) {
                     // Handle the "Home" navigation item
+<<<<<<< HEAD
                     Toast.makeText(MainActivity.this, "Home Selected", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(MainActivity.this, MainActivity.class);
                     startActivity(intent);
@@ -69,6 +74,12 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Playlist Selected", Toast.LENGTH_SHORT).show();
                     Intent playlistIntent = new Intent(MainActivity.this, FavoriteActivity.class);
                     startActivity(playlistIntent);
+=======
+                    return true;
+                } else if (id == R.id.navigation_playlist) {
+                    Intent intent = new Intent(MainActivity.this, FavoriteActivity.class);
+                    startActivity(intent);
+>>>>>>> f9e87621b0b303af92910387eff015926a9080a3
                     return true;
                 }
                 return false;
@@ -76,6 +87,11 @@ public class MainActivity extends AppCompatActivity {
         });
         Init();
     }
+//    private void replaceFragment(Fragment fragment){
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        fragmentTransaction.commit();
+//    }
 
     @Override
     protected void onResume() {

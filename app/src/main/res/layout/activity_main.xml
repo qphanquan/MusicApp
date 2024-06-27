@@ -240,5 +240,13 @@
         android:background="@color/blueDark"
         app:menu="@menu/bottom_nav_menu"
         app:itemIconTint="@color/white"
+<<<<<<< HEAD
         app:itemTextColor="@color/white" />
 </RelativeLayout>
+=======
+        app:itemTextColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+
+</RelativeLayout>
+>>>>>>> f9e87621b0b303af92910387eff015926a9080a3

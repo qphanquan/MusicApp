@@ -43,6 +43,7 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyVi
         return new MyViewHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         String songId = songsId.get(position);
