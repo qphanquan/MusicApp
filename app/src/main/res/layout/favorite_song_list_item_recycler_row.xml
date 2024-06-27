@@ -38,12 +38,13 @@
             android:id="@+id/songslist_singerName_text_view">
         </TextView>
     </LinearLayout>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="remove"
+    <ImageButton
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:id="@+id/remove_playlist"
+        android:background="@drawable/ic_red_favorite_24"
         android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"/>
+        android:layout_centerVertical="true">
+    </ImageButton>
 
 </RelativeLayout>

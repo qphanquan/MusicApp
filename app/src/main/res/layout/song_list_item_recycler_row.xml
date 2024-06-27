@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -38,12 +37,17 @@
             android:id="@+id/songslist_singerName_text_view">
         </TextView>
     </LinearLayout>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="add"
+
+    <ImageButton
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:id="@+id/add_playlist"
+        android:background="@drawable/ic_shadow_favorite_24"
         android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"/>
+        android:layout_centerVertical="true">
+    </ImageButton>
+
 
 </RelativeLayout>
+
+

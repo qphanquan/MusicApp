@@ -12,7 +12,7 @@ import com.example.musicapp.models.SongModel;
 public class CacheExoPlayer {
     private static CacheExoPlayer Instance;
     private ExoPlayer exoPlayer;
-    private SongModel songModel;
+    private SongModel currentSong;
 
     public static CacheExoPlayer getInstance(){
         if(Instance == null)
@@ -20,18 +20,22 @@ public class CacheExoPlayer {
         return Instance;
     }
     public void startPlaying(Context context, SongModel song){
-        this.songModel = song;
-        PlayerView playerView = ((Activity)context).findViewById(R.id.player_view);
-        this.exoPlayer = new ExoPlayer.Builder(context).build();
-        playerView.setPlayer(this.exoPlayer);
-        MediaItem mediaItem = MediaItem.fromUri(this.songModel.getSongUrl());
-        exoPlayer.setMediaItem(mediaItem);
-        exoPlayer.prepare();
-        exoPlayer.play();
+        if(exoPlayer == null)
+            this.exoPlayer = new ExoPlayer.Builder(context).build();
+
+        if(currentSong != song){
+            this.currentSong = song;
+            PlayerView playerView = ((Activity)context).findViewById(R.id.player_view);
+            playerView.setPlayer(this.exoPlayer);
+            MediaItem mediaItem = MediaItem.fromUri(this.currentSong.getSongUrl());
+            exoPlayer.setMediaItem(mediaItem);
+            exoPlayer.prepare();
+            exoPlayer.play();
+        }
     }
 
-    public SongModel getSongModel(){
-        return this.songModel;
+    public SongModel getCurrentSong() {
+        return currentSong;
     }
 
     public ExoPlayer getExoPlayer(){

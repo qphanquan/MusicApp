@@ -42,11 +42,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="16dp"
-        android:layout_below="@id/toolbar">
+        android:layout_below="@id/toolbar"
+        android:layout_above="@id/cachePlayer_view"> <!-- Đảm bảo phần nội dung nằm trên cachePlayer_view -->
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
@@ -192,7 +193,8 @@
         android:padding="8dp"
         android:id="@+id/cachePlayer_view"
         android:layout_alignParentBottom="true"
-        android:visibility="invisible">
+        android:visibility="invisible"
+        android:layout_above="@id/bottomNavigationView"> <!-- Đảm bảo cachePlayer_view nằm trên thanh menu -->
 
         <ImageView
             android:layout_width="40dp"
@@ -228,23 +230,15 @@
                 android:id="@+id/main_singerName_text_view">
             </TextView>
         </LinearLayout>
-
     </RelativeLayout>
 
-<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent">-->
-
-<!--        <com.google.android.material.bottomnavigation.BottomNavigationView-->
-<!--            android:id="@+id/bottomNavigationView"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="75dp"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintHorizontal_bias="0.5"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:menu="@menu/main_menu" />-->
-<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/blueDark"
+        app:menu="@menu/bottom_nav_menu"
+        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/white" />
 </RelativeLayout>

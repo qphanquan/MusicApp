@@ -35,6 +35,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+
+
+
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -49,12 +52,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        show = findViewById(R.id.show_playlist);
-        show.setOnClickListener(new View.OnClickListener() {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,FavoriteActivity.class);
-                startActivity(intent);
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                if (id == R.id.navigation_home) {
+                    // Handle the "Home" navigation item
+                    Toast.makeText(MainActivity.this, "Home Selected", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                    return true;
+                } else if (id == R.id.navigation_playlist) {
+                    // Handle the "Playlist" navigation item
+                    Toast.makeText(MainActivity.this, "Playlist Selected", Toast.LENGTH_SHORT).show();
+                    Intent playlistIntent = new Intent(MainActivity.this, FavoriteActivity.class);
+                    startActivity(playlistIntent);
+                    return true;
+                }
+                return false;
             }
         });
         Init();
@@ -128,12 +145,19 @@ public class MainActivity extends AppCompatActivity {
         ImageView coverUrl = this.findViewById(R.id.main_songcoverUrl_image_view);
         TextView songName = this.findViewById(R.id.main_songName_text_view);
         TextView singerName = this.findViewById(R.id.main_singerName_text_view);
-        SongModel songModel = CacheExoPlayer.getInstance().getSongModel();
-        if(songModel != null) {
+        SongModel currentSong = CacheExoPlayer.getInstance().getCurrentSong();
+        if(currentSong != null) {
             relativeLayout.setVisibility(View.VISIBLE);
-            songName.setText(songModel.getSongName());
-            singerName.setText(songModel.getSingerName());
-            Glide.with(coverUrl).load(songModel.getCoverUrl()).circleCrop().into(coverUrl);
+            songName.setText(currentSong.getSongName());
+            singerName.setText(currentSong.getSingerName());
+//            Glide.with(coverUrl)
+//                    .load(currentSong.getCoverUrl())
+//                    .asBitmap()
+//                    .centerCrop()
+//                    .transform(new MyTransformation(mContext, 90))
+//                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+//                    .into(coverUrl);
+            //Glide.with(coverUrl).load(currentSong.getCoverUrl()).circleCrop().into(coverUrl);
         }
         else
             relativeLayout.setVisibility(View.GONE);
