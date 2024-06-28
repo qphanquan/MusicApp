@@ -2,6 +2,7 @@ package com.example.musicapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 
 import androidx.media3.common.MediaItem;
 import androidx.media3.exoplayer.ExoPlayer;
@@ -12,7 +13,7 @@ import com.example.musicapp.models.SongModel;
 public class CacheExoPlayer {
     private static CacheExoPlayer Instance;
     private ExoPlayer exoPlayer;
-    private SongModel currentSong;
+    private SongModel currentSong = null;
 
     public static CacheExoPlayer getInstance(){
         if(Instance == null)
@@ -25,8 +26,8 @@ public class CacheExoPlayer {
 
         if(currentSong != song){
             this.currentSong = song;
-            PlayerView playerView = ((Activity)context).findViewById(R.id.player_view);
-            playerView.setPlayer(this.exoPlayer);
+//            PlayerView playerView = ((Activity)context).findViewById(R.id.player_view);
+//            playerView.setPlayer(this.exoPlayer);
             MediaItem mediaItem = MediaItem.fromUri(this.currentSong.getSongUrl());
             exoPlayer.setMediaItem(mediaItem);
             exoPlayer.prepare();

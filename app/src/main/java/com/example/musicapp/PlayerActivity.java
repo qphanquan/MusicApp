@@ -50,16 +50,20 @@ public class PlayerActivity extends AppCompatActivity {
         this.songName = this.findViewById(R.id.player_songName_text_view);
         this.singerName = this.findViewById(R.id.player_singerName_text_view);
 
-        this.songModel = (SongModel) this.getIntent().getSerializableExtra("SONG");
+        //this.songModel = (SongModel) this.getIntent().getSerializableExtra("SONG");
+        this.songModel = CacheExoPlayer.getInstance().getCurrentSong();
         Glide.with(this.coverImg).load(this.songModel.getCoverUrl()).circleCrop().into(this.coverImg);
         Glide.with(this.gifImg).load(R.drawable.media_playing).circleCrop().into(this.gifImg);
         this.songName.setText(songModel.getSongName());
         this.singerName.setText(songModel.getSingerName());
 
-        //SetUpExoPlayer();
-        CacheExoPlayer.getInstance().startPlaying(this, this.songModel);
+        //CacheExoPlayer.getInstance().startPlaying(this, this.songModel);
 
         this.exoPlayer = CacheExoPlayer.getInstance().getExoPlayer();
+
+        PlayerView playerView = this.findViewById(R.id.player_view);
+        playerView.setPlayer(this.exoPlayer);
+
         this.exoPlayer.addListener(new Player.Listener() {
             @Override
             public void onIsPlayingChanged(boolean isPlaying) {

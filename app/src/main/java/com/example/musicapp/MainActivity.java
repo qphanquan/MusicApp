@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -32,6 +33,7 @@ import com.example.musicapp.adapter.CategoryAdapter;
 import com.example.musicapp.adapter.SectionSongListAdapter;
 import com.example.musicapp.adapter.SongsListAdapter;
 import com.example.musicapp.models.CategoryModel;
+import com.example.musicapp.models.FavoriteModel;
 import com.example.musicapp.models.SongModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -209,23 +211,43 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void ShowPlayerView(){
+        FavoriteModel favorite = new FavoriteModel();
         RelativeLayout relativeLayout = this.findViewById(R.id.cachePlayer_view);
         ImageView coverUrl = this.findViewById(R.id.main_songcoverUrl_image_view);
         TextView songName = this.findViewById(R.id.main_songName_text_view);
         TextView singerName = this.findViewById(R.id.main_singerName_text_view);
+        ImageButton addPlaylist = this.findViewById(R.id.main_add_playlist);
         SongModel currentSong = CacheExoPlayer.getInstance().getCurrentSong();
         if(currentSong != null) {
             relativeLayout.setVisibility(View.VISIBLE);
             songName.setText(currentSong.getSongName());
             singerName.setText(currentSong.getSingerName());
-//            Glide.with(coverUrl)
-//                    .load(currentSong.getCoverUrl())
-//                    .asBitmap()
-//                    .centerCrop()
-//                    .transform(new MyTransformation(mContext, 90))
-//                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
-//                    .into(coverUrl);
             Glide.with(coverUrl).load(currentSong.getCoverUrl()).circleCrop().into(coverUrl);
+
+            FirebaseFirestore.getInstance().collection("Favorites")
+                    .document(currentSong.getId())
+                    .get()
+                    .addOnSuccessListener(favoriteSnapshot -> {
+                        if (favoriteSnapshot.exists()) {
+                            addPlaylist.setImageResource(R.drawable.ic_red_favorite_24);
+                        } else {
+                            addPlaylist.setImageResource(R.drawable.ic_shadow_favorite_24);
+                        }
+                    });
+
+//            addPlaylist.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if()
+//                }
+//            });
+            relativeLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), PlayerActivity.class);
+                    v.getContext().startActivity(intent);
+                }
+            });
         }
         else
             relativeLayout.setVisibility(View.GONE);

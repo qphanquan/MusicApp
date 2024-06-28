@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.musicapp.CacheExoPlayer;
 import com.example.musicapp.PlayerActivity;
 import com.example.musicapp.R;
 import com.example.musicapp.models.SongModel;
@@ -74,20 +75,35 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyVi
                                 .get()
                                 .addOnSuccessListener(favoriteSnapshot -> {
                                     if (favoriteSnapshot.exists()) {
+                                        holder.favoriteModel = favoriteSnapshot.toObject(FavoriteModel.class);
                                         holder.addToFavoriteButton.setImageResource(R.drawable.ic_red_favorite_24);
                                     } else {
                                         holder.addToFavoriteButton.setImageResource(R.drawable.ic_shadow_favorite_24);
                                     }
                                 });
 
-                        // Handle add button click
-                        holder.addToFavoriteButton.setOnClickListener(v -> addToFavorites(songModel, holder.addToFavoriteButton));
+                        holder.addToFavoriteButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if(holder.favoriteModel.getId() == null){
+                                    Log.e("SONGLISTADAPTE", "them");
+                                    addToFavorites(songModel, holder.addToFavoriteButton);
+                                }else{
+                                    Log.e("SONGLISTADAPTE", "xoa");
+                                    deleteFavoriteFromFirestore(holder.favoriteModel, holder.addToFavoriteButton);
+                                }
+                            }
+                        });
+
+//                        // Handle add button click
+//                        holder.addToFavoriteButton.setOnClickListener(v -> addToFavorites(songModel, holder.addToFavoriteButton));
 
                         holder.itemView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                CacheExoPlayer.getInstance().startPlaying(v.getContext(), songModel);
                                 Intent intent = new Intent(v.getContext(), PlayerActivity.class);
-                                intent.putExtra("SONG", songModel);
+                                //intent.putExtra("SONG", songModel);
                                 v.getContext().startActivity(intent);
                             }
                         });
@@ -147,6 +163,7 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyVi
         TextView songName;
         TextView singerName;
         ImageButton addToFavoriteButton;
+        FavoriteModel favoriteModel;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -154,6 +171,7 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyVi
             songName = itemView.findViewById(R.id.songslist_songName_text_view);
             singerName = itemView.findViewById(R.id.songslist_singerName_text_view);
             addToFavoriteButton = itemView.findViewById(R.id.add_playlist);
+            favoriteModel = new FavoriteModel();
         }
     }
 }
