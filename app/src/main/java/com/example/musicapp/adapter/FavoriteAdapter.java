@@ -35,13 +35,13 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.MyView
     private Context mContext;
     private List<FavoriteModel> mFavorites;
     private FirebaseFirestore db;
-    private String userId;
+    private String email;
 
     public FavoriteAdapter(Context context, List<FavoriteModel> favorites) {
         mContext = context;
         mFavorites = favorites;
         db = FirebaseFirestore.getInstance();
-        this.userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        this.email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
     }
 
     @NonNull
@@ -63,7 +63,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.MyView
                 .apply(new RequestOptions().transform(new RoundedCorners(32))) // Rounded corners
                 .into(holder.favoriteImage);
 
-        FirebaseFirestore.getInstance().collection("Users").document(this.userId).collection("Favorites")
+        FirebaseFirestore.getInstance().collection("Users").document(this.email).collection("Favorites")
                 .document(favorite.getId())
                 .get()
                 .addOnSuccessListener(favoriteSnapshot -> {
@@ -122,10 +122,10 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.MyView
     }
 
     private void deleteFavoriteFromFirestore(FavoriteModel favorite) {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Users").document(userId).collection("Favorites")
+        db.collection("Users").document(email).collection("Favorites")
                 .document(favorite.getId())
                 .delete()
                 .addOnSuccessListener(aVoid -> {

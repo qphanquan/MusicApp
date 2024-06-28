@@ -75,10 +75,10 @@ public class FavoriteActivity extends AppCompatActivity {
     }
 
     private void loadFavorites() {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Users").document(userId).collection("Favorites")
+        db.collection("Users").document(email).collection("Favorites")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

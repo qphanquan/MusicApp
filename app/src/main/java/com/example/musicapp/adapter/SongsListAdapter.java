@@ -33,12 +33,12 @@ import java.util.List;
 public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyViewHolder> {
     private Context context;
     private List<String> songsId;
-    private String userId;
+    private String email;
 
     public SongsListAdapter(Context context, List<String> songsId){
         this.context = context;
         this.songsId = songsId;
-        this.userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        this.email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
     }
 
     public void SetSongsId(List<String> idSongs){
@@ -73,7 +73,7 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyVi
                                 .into(holder.coverUrl);
 
                         // Check if the song is already in favorites
-                        FirebaseFirestore.getInstance().collection("Users").document(this.userId).collection("Favorites")
+                        FirebaseFirestore.getInstance().collection("Users").document(this.email).collection("Favorites")
                                 .document(songModel.getId())
                                 .get()
                                 .addOnSuccessListener(favoriteSnapshot -> {
@@ -105,7 +105,7 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyVi
 
 
     private void addToFavorites(SongModel songModel, ImageButton addToFavoriteButton) {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
         FavoriteModel favoriteModel = new FavoriteModel(
                 songModel.getId(),
@@ -116,7 +116,7 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyVi
         );
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Users").document(userId).collection("Favorites")
+        db.collection("Users").document(email).collection("Favorites")
                 .document(favoriteModel.getId())
                 .set(favoriteModel)
                 .addOnSuccessListener(aVoid -> {
