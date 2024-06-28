@@ -2,6 +2,7 @@ package com.example.musicapp.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +18,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.musicapp.CacheExoPlayer;
 import com.example.musicapp.PlayerActivity;
 import com.example.musicapp.R;
 import com.example.musicapp.models.FavoriteModel;
+import com.example.musicapp.models.SongModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,11 +35,13 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.MyView
     private Context mContext;
     private List<FavoriteModel> mFavorites;
     private FirebaseFirestore db;
+    private String userId;
 
     public FavoriteAdapter(Context context, List<FavoriteModel> favorites) {
         mContext = context;
         mFavorites = favorites;
         db = FirebaseFirestore.getInstance();
+        this.userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
     @NonNull
@@ -53,20 +58,19 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.MyView
         holder.favoriteName.setText(favorite.getSongName());
         holder.favoriteDescription.setText(favorite.getSingerName());
 
-
         Glide.with(mContext)
                 .load(favorite.getCoverUrl())
                 .apply(new RequestOptions().transform(new RoundedCorners(32))) // Rounded corners
                 .into(holder.favoriteImage);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, PlayerActivity.class);
-                intent.putExtra("FAVORITE", favorite);
-                mContext.startActivity(intent);
-            }
-        });
+        FirebaseFirestore.getInstance().collection("Users").document(this.userId).collection("Favorites")
+                .document(favorite.getId())
+                .get()
+                .addOnSuccessListener(favoriteSnapshot -> {
+                    if (favoriteSnapshot.exists()) {
+                        getSongById(favorite.getId(), holder.itemView);
+                    }
+                });
 
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,6 +78,27 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.MyView
                 deleteFavoriteFromFirestore(favorite);
             }
         });
+    }
+
+    public void getSongById(String id, View item){
+        // Load song details from Firestore
+        FirebaseFirestore.getInstance().collection("Song")
+                .document(id)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        SongModel songModel = documentSnapshot.toObject(SongModel.class);
+                        item.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                CacheExoPlayer.getInstance().startPlaying(mContext, songModel);
+                                Intent intent = new Intent(mContext, PlayerActivity.class);
+                                mContext.startActivity(intent);
+                            }
+                        });
+                    }
+                });
+
     }
 
     @Override
