@@ -22,6 +22,7 @@ import com.example.musicapp.R;
 import com.example.musicapp.models.FavoriteModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -30,10 +31,12 @@ import java.util.List;
 public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.MyViewHolder> {
     private Context mContext;
     private List<FavoriteModel> mFavorites;
+    private FirebaseFirestore db;
 
     public FavoriteAdapter(Context context, List<FavoriteModel> favorites) {
         mContext = context;
         mFavorites = favorites;
+        db = FirebaseFirestore.getInstance();
     }
 
     @NonNull
@@ -50,13 +53,12 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.MyView
         holder.favoriteName.setText(favorite.getSongName());
         holder.favoriteDescription.setText(favorite.getSingerName());
 
-        // Load image using Glide library
+
         Glide.with(mContext)
                 .load(favorite.getCoverUrl())
                 .apply(new RequestOptions().transform(new RoundedCorners(32))) // Rounded corners
                 .into(holder.favoriteImage);
 
-        // Handle item click to open PlayerActivity
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,7 +68,6 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.MyView
             }
         });
 
-        // Handle delete button click to remove favorite from Firestore
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,18 +97,18 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.MyView
     }
 
     private void deleteFavoriteFromFirestore(FavoriteModel favorite) {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Favorites")
+        db.collection("Users").document(userId).collection("Favorites")
                 .document(favorite.getId())
                 .delete()
                 .addOnSuccessListener(aVoid -> {
-                    // Handle success: Remove from local list and update UI
                     mFavorites.remove(favorite);
-                    notifyDataSetChanged(); // Refresh RecyclerView
+                    notifyDataSetChanged();
                     Toast.makeText(mContext, "Deleted from favorites successfully", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> {
-                    // Handle failure: Show error message or log the error
                     Toast.makeText(mContext, "Failed to delete from favorites: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }

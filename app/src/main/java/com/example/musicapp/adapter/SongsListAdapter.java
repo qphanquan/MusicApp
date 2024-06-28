@@ -23,6 +23,7 @@ import com.example.musicapp.R;
 import com.example.musicapp.models.SongModel;
 import com.example.musicapp.models.FavoriteModel;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -98,9 +99,10 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyVi
                 });
     }
 
-    // Method to handle adding the song to favorites
+
     private void addToFavorites(SongModel songModel, ImageButton addToFavoriteButton) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         FavoriteModel favoriteModel = new FavoriteModel(
                 songModel.getId(),
                 songModel.getSongName(),
@@ -109,7 +111,8 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyVi
                 songModel.getSongUrl()
         );
 
-        db.collection("Favorites")
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("Users").document(userId).collection("Favorites")
                 .document(favoriteModel.getId())
                 .set(favoriteModel)
                 .addOnSuccessListener(aVoid -> {
@@ -118,21 +121,6 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyVi
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(context, "Failed to add to favorites: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
-    }
-
-    private void deleteFavoriteFromFirestore(FavoriteModel favorite, ImageButton addToFavoriteButton) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Favorites")
-                .document(favorite.getId())
-                .delete()
-                .addOnSuccessListener(aVoid -> {
-                    addToFavoriteButton.setImageResource(R.drawable.ic_shadow_favorite_24);
-                    Toast.makeText(context, "Deleted from favorites successfully", Toast.LENGTH_SHORT).show();
-                })
-                .addOnFailureListener(e -> {
-                    // Handle failure: Show error message or log the error
-                    Toast.makeText(context, "Failed to delete from favorites: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 
