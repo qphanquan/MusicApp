@@ -33,10 +33,12 @@ import java.util.List;
 public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyViewHolder> {
     private Context context;
     private List<String> songsId;
+    private String userId;
 
     public SongsListAdapter(Context context, List<String> songsId){
         this.context = context;
         this.songsId = songsId;
+        this.userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
     public void SetSongsId(List<String> idSongs){
@@ -71,33 +73,19 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyVi
                                 .into(holder.coverUrl);
 
                         // Check if the song is already in favorites
-                        FirebaseFirestore.getInstance().collection("Favorites")
+                        FirebaseFirestore.getInstance().collection("Users").document(this.userId).collection("Favorites")
                                 .document(songModel.getId())
                                 .get()
                                 .addOnSuccessListener(favoriteSnapshot -> {
                                     if (favoriteSnapshot.exists()) {
-                                        holder.favoriteModel = favoriteSnapshot.toObject(FavoriteModel.class);
                                         holder.addToFavoriteButton.setImageResource(R.drawable.ic_red_favorite_24);
                                     } else {
                                         holder.addToFavoriteButton.setImageResource(R.drawable.ic_shadow_favorite_24);
                                     }
                                 });
 
-                        holder.addToFavoriteButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if(holder.favoriteModel.getId() == null){
-                                    Log.e("SONGLISTADAPTE", "them");
-                                    addToFavorites(songModel, holder.addToFavoriteButton);
-                                }else{
-                                    Log.e("SONGLISTADAPTE", "xoa");
-                                    deleteFavoriteFromFirestore(holder.favoriteModel, holder.addToFavoriteButton);
-                                }
-                            }
-                        });
-
-//                        // Handle add button click
-//                        holder.addToFavoriteButton.setOnClickListener(v -> addToFavorites(songModel, holder.addToFavoriteButton));
+                        // Handle add button click
+                        holder.addToFavoriteButton.setOnClickListener(v -> addToFavorites(songModel, holder.addToFavoriteButton));
 
                         holder.itemView.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -151,7 +139,6 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyVi
         TextView songName;
         TextView singerName;
         ImageButton addToFavoriteButton;
-        FavoriteModel favoriteModel;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -159,7 +146,6 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyVi
             songName = itemView.findViewById(R.id.songslist_songName_text_view);
             singerName = itemView.findViewById(R.id.songslist_singerName_text_view);
             addToFavoriteButton = itemView.findViewById(R.id.add_playlist);
-            favoriteModel = new FavoriteModel();
         }
     }
 }

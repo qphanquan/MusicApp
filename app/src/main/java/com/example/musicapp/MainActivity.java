@@ -38,6 +38,7 @@ import com.example.musicapp.models.SongModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -75,6 +76,11 @@ public class MainActivity extends AppCompatActivity {
                 } else if (id == R.id.navigation_playlist) {
                     // Handle the "Playlist" navigation item
                     Intent playlistIntent = new Intent(MainActivity.this, FavoriteActivity.class);
+                    startActivity(playlistIntent);
+                    return true;
+                } else if (id == R.id.navigation_output) {
+                    FirebaseAuth.getInstance().signOut();
+                    Intent playlistIntent = new Intent(MainActivity.this, LoginActivity.class);
                     startActivity(playlistIntent);
                     return true;
                 }
@@ -212,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void ShowPlayerView(){
         FavoriteModel favorite = new FavoriteModel();
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         RelativeLayout relativeLayout = this.findViewById(R.id.cachePlayer_view);
         ImageView coverUrl = this.findViewById(R.id.main_songcoverUrl_image_view);
         TextView songName = this.findViewById(R.id.main_songName_text_view);
@@ -224,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
             singerName.setText(currentSong.getSingerName());
             Glide.with(coverUrl).load(currentSong.getCoverUrl()).circleCrop().into(coverUrl);
 
-            FirebaseFirestore.getInstance().collection("Favorites")
+            FirebaseFirestore.getInstance().collection("Users").document(userId).collection("Favorites")
                     .document(currentSong.getId())
                     .get()
                     .addOnSuccessListener(favoriteSnapshot -> {

@@ -7,4 +7,9 @@
         android:id="@+id/navigation_playlist"
         android:icon="@drawable/ic_playlist"
         android:title="Playlist" />
+
+    <item
+        android:id="@+id/navigation_output"
+        android:icon="@drawable/baseline_output_24"
+        android:title="Output" />
 </menu>
