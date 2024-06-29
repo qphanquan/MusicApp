@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -54,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
     private SectionSongListAdapter sectionSongListAdapter;
     private SongsListAdapter songsListAdapter;
     ImageView show;
+    ImageView playlistAdd;
+    EditText playlistName;
     SearchView searchViewSongs;
     List<String> idSongNames;
     List<SongModel> songModels;
@@ -75,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 } else if (id == R.id.navigation_playlist) {
                     // Handle the "Playlist" navigation item
-                    Intent playlistIntent = new Intent(MainActivity.this, FavoriteActivity.class);
+                    //Intent playlistIntent = new Intent(MainActivity.this, FavoriteActivity.class);
+                    Intent playlistIntent = new Intent(MainActivity.this, PlaylistActivity.class);
                     startActivity(playlistIntent);
                     return true;
                 } else if (id == R.id.navigation_output) {
@@ -130,6 +134,17 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(this.songsListAdapter);
 
+        this.playlistAdd = this.findViewById(R.id.main_playlistAdd);
+        this.playlistName = this.findViewById(R.id.main_playlistName);
+
+        this.playlistAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), PlaylistActivity.class);
+                intent.putExtra("PLAYLISTNAME", playlistName.getText().toString());
+                v.getContext().startActivity(intent);
+            }
+        });
     }
 
     public void SearchSongs(String txtSearch){
@@ -242,12 +257,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-//            addPlaylist.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if()
-//                }
-//            });
             relativeLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

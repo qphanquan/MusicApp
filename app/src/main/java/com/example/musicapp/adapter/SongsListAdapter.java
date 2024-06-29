@@ -34,11 +34,13 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyVi
     private Context context;
     private List<String> songsId;
     private String email;
+    private String useId;
 
     public SongsListAdapter(Context context, List<String> songsId){
         this.context = context;
         this.songsId = songsId;
         this.email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        this.useId = FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
     public void SetSongsId(List<String> idSongs){
@@ -73,7 +75,7 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyVi
                                 .into(holder.coverUrl);
 
                         // Check if the song is already in favorites
-                        FirebaseFirestore.getInstance().collection("Users").document(this.email).collection("Favorites")
+                        FirebaseFirestore.getInstance().collection("Users").document(this.useId).collection("Favorites")
                                 .document(songModel.getId())
                                 .get()
                                 .addOnSuccessListener(favoriteSnapshot -> {
@@ -116,7 +118,7 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyVi
         );
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Users").document(email).collection("Favorites")
+        db.collection("Users").document(this.useId).collection("Favorites")
                 .document(favoriteModel.getId())
                 .set(favoriteModel)
                 .addOnSuccessListener(aVoid -> {
